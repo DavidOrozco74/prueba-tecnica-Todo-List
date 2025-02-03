@@ -1,0 +1,83 @@
+<div class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+  <h1 class="text-2xl font-bold text-center mb-4">To-Do List</h1>
+
+  <!-- Formulario para agregar una nueva tarea -->
+  <form #todoForm="ngForm" (ngSubmit)="addTodo()" class="flex flex-col gap-4 mb-4">
+   <div class="flex flex-col">
+      <label for="newTodoTitle" class="mb-1 font-medium">Título de la tarea</label>
+      <input
+        id="newTodoTitle"
+        type="text"
+        [(ngModel)]="newTodoTitle"
+        name="title"
+        placeholder="Nueva tarea"
+        required
+        class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+    <div class="flex flex-col">
+      <label for="newTodoDescription" class="mb-1 font-medium">Descripción de la tarea</label>
+      <input
+        id="newTodoDescription"
+        type="text"
+        [(ngModel)]="newTodoDescription"
+        name="description"
+        placeholder="Descripción de la tarea"
+        required
+        class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+    <div class="flex flex-col">
+  <label for="newTodoState" class="mb-1 font-medium">Estado de la tarea</label>
+  <div class="flex items-center space-x-2">
+    <input
+      id="newTodoState"
+      type="checkbox"
+      [(ngModel)]="newTodoState"
+      name="state"
+      class="h-5 w-5 text-green-500"
+    />
+    <label for="newTodoState">{{ getEstadoTexto() }}</label>
+  </div>
+</div>
+    <button
+      type="submit"
+      [disabled]="!todoForm.valid"
+      class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+    >
+      Agregar
+    </button>
+  </form>
+
+  <!-- Lista de tareas -->
+  <ul class="space-y-2">
+    <li
+      *ngFor="let todo of todos; trackBy: trackByTodo"
+      class="flex items-center justify-between px-4 py-2 bg-gray-100 rounded-md"
+    >
+      <div class="flex items-center space-x-2">
+        <input
+          [id]="todo._id"
+          type="checkbox"
+          [(ngModel)]="todo.completed"
+          (ngModelChange)="toggleTodo(todo)"
+          class="h-5 w-5 text-green-500"
+        />
+        <label 
+          [for]="todo._id" 
+          [class.line-through]="todo.completed" 
+          class="cursor-pointer"
+        >
+          {{ todo.title }} - {{ todo.description }}
+        </label>
+      </div>
+      <button
+        (click)="deleteTodo(todo._id!)"
+        class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+        [attr.aria-label]="'Eliminar la tarea ' + todo.title"
+      >
+        Eliminar
+      </button>
+    </li>
+  </ul>
+</div>
